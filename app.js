@@ -20,6 +20,6 @@ app.use(morgan("combined", { stream: accessStream }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/", (req, res) => res.send("Working"));
+app.use("/", (req, res) => res.send("Working,Welcome To SnapDelivery"));
 
 app.listen(process.env.PORT || 4000);
