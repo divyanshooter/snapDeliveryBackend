@@ -1,0 +1,7 @@
+{
+    "env":{
+        "MONGO_USER":"divyanshu",
+        "MONGO_PASSWORD":"dibudivyanshu",
+        "MONGO_DB":"snapDelivery"
+     }
+}
