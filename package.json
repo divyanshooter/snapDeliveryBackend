@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r dotenv/config"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,8 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "mocha": "^8.2.1",
+    "supertest": "^6.0.1"
   }
 }

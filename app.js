@@ -8,6 +8,7 @@ const compression = require("compression");
 const morgan = require("morgan");
 
 const routes = require("./routes/routes");
+const { exit } = require("process");
 
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.5q7vj.mongodb.net/${process.env.MONGO_DB}`;
 const app = express();
@@ -25,7 +26,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
 
-app.get("/", (req, res) => res.send("Working,Welcome To SnapDelivery"));
+app.get("/", (req, res) =>
+  res.send({ message: "Working,Welcome To SnapDelivery" })
+);
 
 app.use("/app/", routes);
 
@@ -36,3 +39,9 @@ mongoose
     app.listen(process.env.PORT || 4000);
   })
   .catch((err) => console.log(err));
+
+function stop() {
+  exit();
+}
+module.exports = app;
+module.exports.stop = stop;
