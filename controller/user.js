@@ -94,7 +94,6 @@ const loginUser = (resBody) => {
       email,
     })
       .then((user) => {
-        console.log(user);
         if (!user) {
           reject({
             status: 404,
