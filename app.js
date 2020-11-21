@@ -21,6 +21,7 @@ app.use(helmet());
 app.use(compression());
 app.use(morgan("combined", { stream: accessStream }));
 app.use(bodyParser.urlencoded({ extended: false }));
+require("dotenv").config();
 
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -1,39 +1,63 @@
-// var should = require("should");
 const app = require("../app");
-const request = require("supertest");
+const chai = require("chai");
+const chaiHttp = require("chai-http");
 
-describe("TESTING", function () {
-  let token;
-  it("should return string ", function (done) {
-    request(app)
-      .get("/")
-      .expect(200)
-      .expect("Content-Type", /json/)
-      .end(function (err, res) {
-        if (err) return done(err);
-        done();
-      });
-  });
-  // it("should respond with token for user login", function (done) {
-  //   const data = {
-  //     email: "test@gmail.com",
-  //     password: "password",
-  //   };
-  //   request(app)
-  //     .post("/app/user/login")
-  //     .send(data)
-  //     .set("Accept", "application/json")
-  //     .expect(200)
-  //     .expect("Content-Type", /json/)
-  //     .end(function (err, res) {
-  //       if (err) {
-  //         return done(err);
-  //       }
+chai.use(chaiHttp);
 
-  //       done();
-  //     });
-  // });
-  after(function () {
-    app.stop();
-  });
-});
+// describe("TESTING", function () {
+//   let token;
+//   it("should return string ", function () {
+//     chai
+//       .request(app)
+//       .get("/")
+//       .end(function (err, res) {
+//         expect(err).to.be.null();
+//         expect(res).to.have.status(200);
+//         expect(res.body.message).to.be.equal("Working,Welcome To SnapDelivery");
+//       });
+//   });
+//   it("should respond with token for user login", (done) => {
+//     try {
+//       chai
+//         .request(app)
+//         .post("/app/user/login")
+//         .send({
+//           email: "test@gmail.com",
+//           password: "password",
+//         })
+//         .end((err, res) => {
+//           if (err) {
+//             done(err);
+//           } else {
+//             done();
+//           }
+//           // expect(res).to.have.status(200);
+//           // expect(res.body.message).to.be.equal("Working,Welcome To SnapDelivery");
+//         });
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   });
+
+//   it("should respond with user", (done) => {
+//     try {
+//       chai
+//         .request(app)
+//         .get("/app/user/fetch")
+//
+//         .end((err, res) => {
+//           if (err) {
+//             done(err);
+//           } else {
+//             res.should.have.status(200);
+//             res.should.be.a("object");
+//             done();
+//           }
+//           // expect(res).to.have.status(200);
+//           // expect(res.body.message).to.be.equal("Working,Welcome To SnapDelivery");
+//         });
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   });
+// });

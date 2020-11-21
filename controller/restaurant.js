@@ -1,45 +1,44 @@
-const User = require("../models/user");
+const restaurant = require("../models/restaurant");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 
-const addUser = (resBody) => {
+const addrestaurant = (resBody) => {
   return new Promise((resolve, reject) => {
     const {
       mobileNumber,
       password,
       fullName,
-      address,
       email,
       age,
       gender,
       state,
       city,
+      address,
       pincode,
     } = resBody;
 
     if (
       !mobileNumber ||
       !fullName.trim() ||
+      !address.trim() ||
       !state.trim() ||
       !email.trim() ||
       !city.trim() ||
-      !address.trim() ||
       !password.trim() ||
       !pincode
-    ) {
+    )
       reject({
         status: 400,
         result: {
           error: "Please provide all the Information",
         },
       });
-    }
-    User.findOne({
-      email,
-    })
-      .then((user) => {
-        if (user) {
+
+    restaurant
+      .findOne({ email })
+      .then((response) => {
+        if (response) {
           reject({
             status: 403,
             result: {
@@ -50,26 +49,27 @@ const addUser = (resBody) => {
         bcrypt
           .hash(password, 12)
           .then((hashedPassword) => {
-            const newUser = new User({
+            const newrestaurant = new restaurant({
               fullName,
               mobileNumber,
               password: hashedPassword,
               email,
+              address,
               gender,
               age,
               state,
-              address,
               city,
               pincode,
             });
-            newUser
+            newrestaurant
               .save()
               .then((savedData) => {
                 if (!savedData)
-                  reject({
+                  return reject({
                     status: 500,
                     result: {
-                      error: "please try again, error while saving user to db",
+                      error:
+                        "please try again, error while saving restaurant to db",
                     },
                   });
                 const token = jwt.sign(
@@ -83,7 +83,7 @@ const addUser = (resBody) => {
                 );
                 resolve({
                   status: 201,
-                  result: { message: "User Created Successfully", token },
+                  result: { message: "Restaurant Created Successfully", token },
                 });
               })
               .catch((err) => {
@@ -96,7 +96,7 @@ const addUser = (resBody) => {
   });
 };
 
-const loginUser = (resBody) => {
+const loginrestaurant = (resBody) => {
   return new Promise((resolve, reject) => {
     const { email, password } = resBody;
     if (!email.trim() || !password.trim())
@@ -107,26 +107,27 @@ const loginUser = (resBody) => {
         },
       });
 
-    User.findOne({
-      email,
-    })
-      .then((user) => {
-        if (!user) {
+    restaurant
+      .findOne({
+        email,
+      })
+      .then((restaurant) => {
+        if (!restaurant) {
           reject({
             status: 404,
             result: {
-              error: "User Does Not exist",
+              error: "Restaurant Does Not exist",
             },
           });
         }
 
         bcrypt
-          .compare(password, user.password)
+          .compare(password, restaurant.password)
           .then((doMatch) => {
             if (doMatch) {
               const token = jwt.sign(
                 {
-                  userId: user._id.toString(),
+                  userId: restaurant._id.toString(),
                 },
                 process.env.JWT_KEY,
                 {
@@ -136,13 +137,14 @@ const loginUser = (resBody) => {
 
               resolve({
                 status: 200,
-                result: { message: "User Logged In Successfully", token },
+                result: { message: "Restaurant Logged In Successfully", token },
               });
+              return;
             } else {
               reject({
                 status: 404,
                 result: {
-                  error: "User Does Not exist",
+                  error: "Restaurant Does Not exist",
                 },
               });
             }
@@ -153,22 +155,24 @@ const loginUser = (resBody) => {
   });
 };
 
-const getUser = (id) => {
+const getRestaurant = (id) => {
+  console.log(id);
   return new Promise((resolve, reject) => {
-    User.findOne({ _id: mongoose.Types.ObjectId(id) })
-      .then((user) => {
-        if (!user) {
+    restaurant
+      .findOne({ _id: mongoose.Types.ObjectId(id) })
+      .then((restaurant) => {
+        if (!restaurant) {
           reject({
             status: 404,
             result: {
-              error: "User Does Not exist",
+              error: "Restaurant Does Not exist",
             },
           });
         }
         resolve({
           status: 200,
           result: {
-            user,
+            restaurant,
           },
         });
       })
@@ -176,22 +180,47 @@ const getUser = (id) => {
   });
 };
 
-const deleteUser = (id) => {
+const getRestaurants = (city) => {
   return new Promise((resolve, reject) => {
-    User.findOneAndDelete({ _id: mongoose.Types.ObjectId(id) })
-      .then((deleteUser) => {
-        if (!deleteUser) {
+    restaurant
+      .find({ city })
+      .then((restaurants) => {
+        if (!restaurants) {
           reject({
             status: 404,
             result: {
-              error: "User Does Not exist",
+              error: "Restaurants Does Not exist",
             },
           });
         }
         resolve({
           status: 200,
           result: {
-            deleteUser,
+            restaurants,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  });
+};
+
+const deleteRestaurant = (id) => {
+  return new Promise((resolve, reject) => {
+    restaurant
+      .findOneAndDelete({ _id: mongoose.Types.ObjectId(id) })
+      .then((deleterestaurant) => {
+        if (!deleterestaurant) {
+          reject({
+            status: 404,
+            result: {
+              error: "Restaurant Does Not exist",
+            },
+          });
+        }
+        resolve({
+          status: 200,
+          result: {
+            message: "Deleted Successfully",
           },
         });
       })
@@ -199,8 +228,9 @@ const deleteUser = (id) => {
   });
 };
 module.exports = {
-  addUser,
-  loginUser,
-  getUser,
-  deleteUser,
+  addrestaurant,
+  loginrestaurant,
+  getRestaurant,
+  getRestaurants,
+  deleteRestaurant,
 };

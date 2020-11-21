@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const user = new mongoose.Schema({
+const restaurantSchema = new mongoose.Schema({
   fullName: {
     type: String,
     trim: true,
@@ -22,22 +22,24 @@ const user = new mongoose.Schema({
     type: String,
     required: true,
   },
-  age: Number,
-  gender: String,
   address: {
     type: String,
-    trim: true,
     required: true,
   },
   state: {
     type: String,
     trim: true,
+    required: true,
   },
   city: {
     type: String,
     trim: true,
+    required: true,
   },
-  pincode: Number,
+  pincode: {
+    type: Number,
+    required: true,
+  },
 });
 
-module.exports = mongoose.model("User", user);
+module.exports = mongoose.model("restaurant", restaurantSchema);
