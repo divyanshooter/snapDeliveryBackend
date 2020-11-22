@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon -r dotenv/config app.js",
-    "test": "mocha -r dotenv/config --reporter xunit",
-    "test-jenkins": "JUNIT_REPORT_PATH=/report.xml mocha -r dotenv/config --colors --reporter mocha-jenkins-reporter"
+    "test": "mocha -r dotenv/config --reporter xunit"
   },
   "repository": {
     "type": "git",
