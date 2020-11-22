@@ -156,7 +156,7 @@ const loginrestaurant = (resBody) => {
 };
 
 const getRestaurant = (id) => {
-  console.log(id);
+  //console.log(id);
   return new Promise((resolve, reject) => {
     restaurant
       .findOne({ _id: mongoose.Types.ObjectId(id) })
