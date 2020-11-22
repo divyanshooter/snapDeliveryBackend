@@ -189,3 +189,6 @@
 ::1 - - [21/Nov/2020:11:55:18 +0000] "POST /app/restaurant/create HTTP/1.1" 201 232 "-" "PostmanRuntime/7.26.8"
 ::1 - - [21/Nov/2020:11:55:45 +0000] "DELETE /app/restaurant/delete HTTP/1.1" 200 44 "-" "PostmanRuntime/7.26.8"
 ::1 - - [21/Nov/2020:11:55:58 +0000] "DELETE /app/restaurant/delete HTTP/1.1" 200 34 "-" "PostmanRuntime/7.26.8"
+::1 - - [21/Nov/2020:12:55:53 +0000] "POST /app/user/create HTTP/1.1" 400 46 "-" "PostmanRuntime/7.26.8"
+::ffff:127.0.0.1 - - [21/Nov/2020:16:12:47 +0000] "GET / HTTP/1.1" 200 45 "-" "node-superagent/3.8.3"
+::1 - - [22/Nov/2020:08:01:40 +0000] "POST /app/restaurant/create HTTP/1.1" 201 240 "-" "PostmanRuntime/7.26.8"

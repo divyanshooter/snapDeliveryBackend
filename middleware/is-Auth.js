@@ -19,6 +19,8 @@ module.exports = (req, res, next) => {
     return;
   }
 
-  req.userId = decodeToken.userId;
+  if (req.userId) req.userId = decodeToken.userId;
+  else req.restaurantId = decodeToken.restaurantId;
+
   next();
 };

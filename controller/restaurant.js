@@ -74,7 +74,7 @@ const addrestaurant = (resBody) => {
                   });
                 const token = jwt.sign(
                   {
-                    userId: savedData._id.toString(),
+                    restaurantId: savedData._id.toString(),
                   },
                   process.env.JWT_KEY,
                   {
@@ -127,7 +127,7 @@ const loginrestaurant = (resBody) => {
             if (doMatch) {
               const token = jwt.sign(
                 {
-                  userId: restaurant._id.toString(),
+                  restaurantId: restaurant._id.toString(),
                 },
                 process.env.JWT_KEY,
                 {
@@ -156,7 +156,6 @@ const loginrestaurant = (resBody) => {
 };
 
 const getRestaurant = (id) => {
-  console.log(id);
   return new Promise((resolve, reject) => {
     restaurant
       .findOne({ _id: mongoose.Types.ObjectId(id) })
