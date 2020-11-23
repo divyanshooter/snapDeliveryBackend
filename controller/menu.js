@@ -51,7 +51,7 @@ const updateMenu = (id, resBody) => {
           reject({
             status: 404,
             result: {
-              error: "Menu does not exists ",
+              error: "Menu does not exists",
             },
           });
         }
