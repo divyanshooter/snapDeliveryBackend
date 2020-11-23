@@ -61,42 +61,42 @@ describe("TESTING", function () {
       });
   });
 
-  // it("should create a test user", function (done) {
-  //   this.timeout(10000);
-  //   const data = {
-  //     mobileNumber: 1234567890,
-  //     password: "pass123",
-  //     fullName: "test user",
-  //     email: "test1@gmail.com",
-  //     age: "50",
-  //     gender: "MALE",
-  //     state: "UP",
-  //     city: "Mirzapur",
-  //     pincode: "2310001",
-  //     address: "test address",
-  //   };
+  it("should create a test user", function (done) {
+    this.timeout(10000);
+    const data = {
+      mobileNumber: 1234567890,
+      password: "pass123",
+      fullName: "test user",
+      email: "test1@gmail.com",
+      age: "50",
+      gender: "MALE",
+      state: "UP",
+      city: "Mirzapur",
+      pincode: "2310001",
+      address: "test address",
+    };
 
-  //   chai
-  //     .request(app)
-  //     .post("/app/user/create")
-  //     .send(data)
-  //     .set("Accept", "application/json")
-  //     .end(function (err, res) {
-  //       if (err) {
-  //         console.log(err);
-  //         return done(err);
-  //       }
-  //       res.should.have.status(201);
-  //       res.body.should.have
-  //         .property("message")
-  //         .eql("User Created Successfully");
-  //       res.body.should.have.property("token");
+    chai
+      .request(app)
+      .post("/app/user/create")
+      .send(data)
+      .set("Accept", "application/json")
+      .end(function (err, res) {
+        if (err) {
+          console.log(err);
+          return done(err);
+        }
+        res.should.have.status(201);
+        res.body.should.have
+          .property("message")
+          .eql("User Created Successfully");
+        res.body.should.have.property("token");
 
-  //       token = res.body.token;
+        token = res.body.token;
 
-  //       done();
-  //     });
-  // });
+        done();
+      });
+  });
 
   it("should say user already exist", function (done) {
     this.timeout(10000);
@@ -155,41 +155,41 @@ describe("TESTING", function () {
       });
   });
 
-  // it("should fetch user", function (done) {
-  //   this.timeout(10000);
+  it("should fetch user", function (done) {
+    this.timeout(10000);
 
-  //   chai
-  //     .request(app)
-  //     .get("/app/user/fetch")
-  //     .set("Accept", "application/json")
-  //     .set("Authorization", "bearer " + token)
-  //     .end(function (err, res) {
-  //       if (err) {
-  //         return done(err);
-  //       }
-  //       res.should.have.status(200);
-  //       res.body.should.be.a("object");
-  //       done();
-  //     });
-  // });
+    chai
+      .request(app)
+      .get("/app/user/fetch")
+      .set("Accept", "application/json")
+      .set("Authorization", "bearer " + token)
+      .end(function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        res.should.have.status(200);
+        res.body.should.be.a("object");
+        done();
+      });
+  });
 
-  // it("should delete a the test user", function (done) {
-  //   this.timeout(10000);
+  it("should delete a the test user", function (done) {
+    this.timeout(10000);
 
-  //   chai
-  //     .request(app)
-  //     .delete("/app/user/delete")
-  //     .set("Accept", "application/json")
-  //     .set("Authorization", "bearer " + token)
-  //     .end(function (err, res) {
-  //       if (err) {
-  //         return done(err);
-  //       }
-  //       res.should.have.status(200);
-  //       res.body.should.be.a("object");
-  //       done();
-  //     });
-  // });
+    chai
+      .request(app)
+      .delete("/app/user/delete")
+      .set("Accept", "application/json")
+      .set("Authorization", "bearer " + token)
+      .end(function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        res.should.have.status(200);
+        res.body.should.be.a("object");
+        done();
+      });
+  });
 
   it("should say user not found", function (done) {
     this.timeout(10000);
