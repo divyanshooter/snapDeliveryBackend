@@ -232,6 +232,7 @@ const deleteRestaurant = (id) => {
             },
           });
         }
+
         return menuCtrl.deleteMenuForever(deleterestaurant.menuId);
       })
       .then((res) => {

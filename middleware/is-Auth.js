@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   if (!req.get("Authorization")) {
-    res.send({ status: 401, message: "Not Authenticated" });
+    res.status(401).send({ status: 401, error: "Not Authenticated" });
     return;
   }
   const token = req.get("Authorization").split(" ")[1];
@@ -11,11 +11,11 @@ module.exports = (req, res, next) => {
   try {
     decodeToken = jwt.verify(token, process.env.JWT_KEY);
   } catch (err) {
-    res.send({ status: 500 });
+    res.status(500).send({ status: 500, error: "Server Error" });
     return;
   }
   if (!decodeToken) {
-    res.send({ status: 401, message: "Not Authenticated" });
+    res.status(401).send({ status: 401, error: "Not Authenticated" });
     return;
   }
 

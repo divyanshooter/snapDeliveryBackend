@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 module.exports = (req, res, next) => {
   if (!req.restaurantId) {
-    res.send({ status: 401, message: "Not Authenticated" });
+    res.status(401).send({ status: 401, error: "Not Authenticated" });
     return;
   }
 
