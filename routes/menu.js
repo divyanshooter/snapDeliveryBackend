@@ -1,39 +1,32 @@
 const Router = require("express").Router();
-const restaurantCtrl = require("../controller/restaurant");
+const menuCtrl = require("../controller/menu");
 const isAuth = require("../middleware/is-Auth");
+const isRestaurant = require("../middleware/is-Restaurant");
 
-Router.post("/create", (req, res) => {
-  restaurantCtrl
-    .addrestaurant(req.body)
+Router.post("/create", isAuth, isRestaurant, (req, res) => {
+  menuCtrl
+    .addmenu(req.body)
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
 
-Router.post("/login", (req, res) => {
-  restaurantCtrl
-    .loginrestaurant(req.body)
+Router.put("/update", isAuth, isRestaurant, (req, res) => {
+  menuCtrl
+    .updateMenu(req.body)
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
 
 Router.get("/fetch", isAuth, (req, res) => {
-  restaurantCtrl
-    .getRestaurant(req.restaurantId)
+  menuCtrl
+    .getMenu(req.menuId)
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
 
-Router.get("/fetchAll", isAuth, (req, res) => {
-  const city = req.query.city;
-  restaurantCtrl
-    .getRestaurants(city)
-    .then((response) => res.status(response.status).json(response.result))
-    .catch((err) => res.status(err.status).json(err.result));
-});
-
-Router.delete("/delete", isAuth, (req, res) => {
-  restaurantCtrl
-    .deleteRestaurant(req.restaurantId)
+Router.delete("/delete", isAuth, isRestaurant, (req, res) => {
+  menuCtrl
+    .deleteMenu(req.menuId)
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
