@@ -17,7 +17,6 @@ const addUser = (resBody) => {
       city,
       pincode,
     } = resBody;
-
     if (
       !mobileNumber ||
       !fullName.trim() ||
