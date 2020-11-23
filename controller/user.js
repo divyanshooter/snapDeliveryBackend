@@ -19,11 +19,17 @@ const addUser = (resBody) => {
     } = resBody;
     if (
       !mobileNumber ||
+      !fullName ||
       !fullName.trim() ||
+      !state ||
       !state.trim() ||
+      !email ||
       !email.trim() ||
+      !city ||
       !city.trim() ||
+      !address ||
       !address.trim() ||
+      !password ||
       !password.trim() ||
       !pincode
     ) {
@@ -89,9 +95,13 @@ const addUser = (resBody) => {
                 reject({ status: 500, result: { errors: err } });
               });
           })
-          .catch((err) => console.log(err));
+          .catch((err) =>
+            reject({ status: 500, result: { error: "Server Error" } })
+          );
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        reject({ status: 500, result: { error: "Server Error" } })
+      );
   });
 };
 
@@ -146,9 +156,13 @@ const loginUser = (resBody) => {
               });
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) =>
+            reject({ status: 500, result: { error: "Server Error" } })
+          );
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        reject({ status: 500, result: { error: "Server Error" } })
+      );
   });
 };
 
@@ -171,7 +185,9 @@ const getUser = (id) => {
           },
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        reject({ status: 500, result: { error: "Server Error" } })
+      );
   });
 };
 
@@ -194,7 +210,9 @@ const deleteUser = (id) => {
           },
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        reject({ status: 500, result: { error: "Server Error" } })
+      );
   });
 };
 module.exports = {

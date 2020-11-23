@@ -1,4 +1,5 @@
 const restaurant = require("../models/restaurant");
+const menuCtrl = require("../controller/menu");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
@@ -20,11 +21,17 @@ const addrestaurant = (resBody) => {
 
     if (
       !mobileNumber ||
+      !fullName ||
       !fullName.trim() ||
+      !address ||
       !address.trim() ||
+      !state ||
       !state.trim() ||
+      !email ||
       !email.trim() ||
+      !city ||
       !city.trim() ||
+      !password ||
       !password.trim() ||
       !pincode
     )
@@ -46,53 +53,62 @@ const addrestaurant = (resBody) => {
             },
           });
         }
-        bcrypt
-          .hash(password, 12)
-          .then((hashedPassword) => {
-            const newrestaurant = new restaurant({
-              fullName,
-              mobileNumber,
-              password: hashedPassword,
-              email,
-              address,
-              gender,
-              age,
-              state,
-              city,
-              pincode,
-            });
-            newrestaurant
-              .save()
-              .then((savedData) => {
-                if (!savedData)
-                  return reject({
-                    status: 500,
-                    result: {
-                      error:
-                        "please try again, error while saving restaurant to db",
-                    },
-                  });
-                const token = jwt.sign(
-                  {
-                    restaurantId: savedData._id.toString(),
-                  },
-                  process.env.JWT_KEY,
-                  {
-                    expiresIn: "1h",
-                  }
-                );
-                resolve({
-                  status: 201,
-                  result: { message: "Restaurant Created Successfully", token },
+        menuCtrl
+          .addMenu({})
+          .then((res) => {
+            bcrypt
+              .hash(password, 12)
+              .then((hashedPassword) => {
+                const newrestaurant = new restaurant({
+                  fullName,
+                  mobileNumber,
+                  password: hashedPassword,
+                  email,
+                  address,
+                  gender,
+                  age,
+                  state,
+                  city,
+                  pincode,
+                  menuId: res.result._id,
                 });
+                newrestaurant
+                  .save()
+                  .then((savedData) => {
+                    if (!savedData)
+                      return reject({
+                        status: 500,
+                        result: {
+                          error:
+                            "please try again, error while saving restaurant to db",
+                        },
+                      });
+                    const token = jwt.sign(
+                      {
+                        restaurantId: savedData._id.toString(),
+                      },
+                      process.env.JWT_KEY,
+                      {
+                        expiresIn: "1h",
+                      }
+                    );
+                    resolve({
+                      status: 201,
+                      result: {
+                        message: "Restaurant Created Successfully",
+                        token,
+                      },
+                    });
+                  })
+                  .catch((err) => {
+                    reject({ status: 500, result: { errors: err } });
+                  });
               })
-              .catch((err) => {
-                reject({ status: 500, result: { errors: err } });
-              });
+              .catch((err) => reject({ status: 500, result: { error: err } }));
           })
-          .catch((err) => console.log(err));
+          .catch((err) => reject({ status: 500, result: { error: err } }));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => reject({ status: 500, result: { error: err } }));
   });
 };
 
@@ -149,9 +165,9 @@ const loginrestaurant = (resBody) => {
               });
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => reject({ status: 500, result: { error: err } }));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => reject({ status: 500, result: { error: err } }));
   });
 };
 
@@ -175,7 +191,7 @@ const getRestaurant = (id) => {
           },
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => reject({ status: 500, result: { error: err } }));
   });
 };
 
@@ -199,7 +215,7 @@ const getRestaurants = (city) => {
           },
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => reject({ status: 500, result: { error: err } }));
   });
 };
 
@@ -216,6 +232,9 @@ const deleteRestaurant = (id) => {
             },
           });
         }
+        return menuCtrl.deleteMenuForever(deleterestaurant.menuId);
+      })
+      .then((res) => {
         resolve({
           status: 200,
           result: {
@@ -223,7 +242,7 @@ const deleteRestaurant = (id) => {
           },
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => reject({ status: 500, result: { error: err } }));
   });
 };
 module.exports = {

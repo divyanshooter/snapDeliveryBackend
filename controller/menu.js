@@ -1,9 +1,10 @@
 const menuModel = require("../models/menu");
 const mongoose = require("mongoose");
 
-const addrestaurant = (resBody) => {
+const addMenu = (resBody) => {
   return new Promise((resolve, reject) => {
-    menuModel
+    const newMenu = new menuModel(resBody);
+    newMenu
       .save()
       .then((savedData) => {
         if (!savedData)
@@ -25,7 +26,7 @@ const addrestaurant = (resBody) => {
   });
 };
 
-const updateMenu = (resBody) => {
+const updateMenu = (id, resBody) => {
   return new Promise((resolve, reject) => {
     if (!id) {
       reject({
@@ -33,8 +34,8 @@ const updateMenu = (resBody) => {
         result: { error: "Menu does not exist" },
       });
     }
-    resBody.data.forEach((item) => {
-      if (!item.price || !item.description) {
+    Object.keys(resBody).forEach((item) => {
+      if (!resBody[item].price || !resBody[item].description) {
         reject({
           status: 400,
           result: {
@@ -44,7 +45,7 @@ const updateMenu = (resBody) => {
       }
     });
     menuModel
-      .updateOne({ _id: mongoose.Types.ObjectId(resBody._id) }, resBody.data)
+      .updateOne({ _id: mongoose.Types.ObjectId(id) }, resBody)
       .then((updatedMenu) => {
         if (!updatedMenu) {
           reject({
@@ -98,13 +99,13 @@ const deleteMenu = (id) => {
       });
     }
     menuModel
-      .findOneAndDelete({ _id: mongoose.Types.ObjectId(id) })
+      .replaceOne({ _id: mongoose.Types.ObjectId(id) }, {})
       .then((deletedMenu) => {
         if (!deletedMenu) {
           reject({
             status: 404,
             result: {
-              error: "Menu d0oes not exist",
+              error: "Menu does not exist",
             },
           });
         }
@@ -118,9 +119,32 @@ const deleteMenu = (id) => {
       .catch((err) => reject({ status: 500, result: { error: err } }));
   });
 };
+
+const deleteMenuForever = (id) => {
+  return new Promise((resolve, reject) => {
+    if (!id) {
+      reject({
+        stautus: 404,
+        result: { error: "Menu does not exist" },
+      });
+    }
+    menuModel
+      .findOneAndDelete({ _id: mongoose.Types.ObjectId(id) })
+      .then((deletedMenu) => {
+        resolve({
+          status: 200,
+          result: {
+            message: "Deleted Successfully",
+          },
+        });
+      })
+      .catch((err) => reject({ status: 500, result: { error: err } }));
+  });
+};
 module.exports = {
-  addrestaurant,
+  addMenu,
   updateMenu,
   getMenu,
   deleteMenu,
+  deleteMenuForever,
 };

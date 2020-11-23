@@ -36,6 +36,10 @@ const restaurantSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
+  menuId: {
+    type: Schema.Types.ObjectId,
+    ref: "menu",
+  },
   pincode: {
     type: Number,
     required: true,
