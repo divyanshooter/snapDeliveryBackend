@@ -34,8 +34,16 @@ const updateMenu = (id, resBody) => {
         result: { error: "Menu does not exist" },
       });
     }
-    Object.keys(resBody).forEach((item) => {
-      if (!resBody[item].price || !resBody[item].description) {
+    if (!resBody.menu) {
+      reject({
+        status: 400,
+        result: {
+          error: "Please provide all the Information",
+        },
+      });
+    }
+    resBody.menu.map((item) => {
+      if (!item.name || !item.price || !item.description) {
         reject({
           status: 400,
           result: {
@@ -99,7 +107,7 @@ const deleteMenu = (id) => {
       });
     }
     menuModel
-      .replaceOne({ _id: mongoose.Types.ObjectId(id) }, {})
+      .replaceOne({ _id: mongoose.Types.ObjectId(id) }, { menu: [] })
       .then((deletedMenu) => {
         if (!deletedMenu) {
           reject({

@@ -517,9 +517,8 @@ describe("Menu TESTING", function () {
           console.log(err);
           return done(err);
         }
-        Object.keys(res.body.menu).length.should.be.eql(2);
         res.should.have.status(200);
-        res.body.menu.should.have.property("_id");
+        res.body.menu.menu.length.should.be.eql(0);
         done();
       });
   });
@@ -553,8 +552,14 @@ describe("Menu TESTING", function () {
   it("should create/Update a test menu for test restaurant", function (done) {
     this.timeout(10000);
     const data = {
-      roti: { price: 5, description: "Butter charges extra" },
-      rice: { price: 30, description: "sukhe chawal kaun khata h be!" },
+      menu: [
+        { name: "roti", price: 5, description: "Butter charges extra" },
+        {
+          name: "rice",
+          price: 30,
+          description: "sukhe chawal kaun khata h be!",
+        },
+      ],
     };
 
     chai
@@ -588,9 +593,8 @@ describe("Menu TESTING", function () {
           console.log(err);
           return done(err);
         }
-        Object.keys(res.body.menu).length.should.be.eql(4);
         res.should.have.status(200);
-        res.body.menu.should.have.property("_id");
+        res.body.menu.menu.length.should.be.eql(2);
         done();
       });
   });
@@ -607,9 +611,8 @@ describe("Menu TESTING", function () {
           console.log(err);
           return done(err);
         }
-        Object.keys(res.body.menu).length.should.be.eql(4);
+        res.body.menu.menu.length.should.be.eql(2);
         res.should.have.status(200);
-        res.body.menu.should.have.property("_id");
         done();
       });
   });
@@ -645,9 +648,9 @@ describe("Menu TESTING", function () {
           console.log(err);
           return done(err);
         }
-        Object.keys(res.body.menu).length.should.be.eql(2);
+        res.body.menu.menu.length.should.be.eql(0);
         res.should.have.status(200);
-        res.body.menu.should.have.property("_id");
+
         done();
       });
   });

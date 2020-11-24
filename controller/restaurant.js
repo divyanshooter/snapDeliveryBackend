@@ -3,6 +3,7 @@ const menuCtrl = require("../controller/menu");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+const e = require("express");
 
 const addrestaurant = (resBody) => {
   return new Promise((resolve, reject) => {
@@ -54,7 +55,7 @@ const addrestaurant = (resBody) => {
           });
         }
         menuCtrl
-          .addMenu({})
+          .addMenu({ menu: [] })
           .then((res) => {
             bcrypt
               .hash(password, 12)
@@ -171,27 +172,50 @@ const loginrestaurant = (resBody) => {
   });
 };
 
-const getRestaurant = (id) => {
+const getRestaurant = (id, menu) => {
   return new Promise((resolve, reject) => {
-    restaurant
-      .findOne({ _id: mongoose.Types.ObjectId(id) })
-      .then((restaurant) => {
-        if (!restaurant) {
-          reject({
-            status: 404,
+    if (menu) {
+      restaurant
+        .findOne({ _id: mongoose.Types.ObjectId(id) })
+        .populate("menuId")
+        .then((restaurant) => {
+          if (!restaurant) {
+            reject({
+              status: 404,
+              result: {
+                error: "Restaurant Does Not exist",
+              },
+            });
+          }
+          resolve({
+            status: 200,
             result: {
-              error: "Restaurant Does Not exist",
+              restaurant,
             },
           });
-        }
-        resolve({
-          status: 200,
-          result: {
-            restaurant,
-          },
-        });
-      })
-      .catch((err) => reject({ status: 500, result: { error: err } }));
+        })
+        .catch((err) => reject({ status: 500, result: { error: err } }));
+    } else {
+      restaurant
+        .findOne({ _id: mongoose.Types.ObjectId(id) })
+        .then((restaurant) => {
+          if (!restaurant) {
+            reject({
+              status: 404,
+              result: {
+                error: "Restaurant Does Not exist",
+              },
+            });
+          }
+          resolve({
+            status: 200,
+            result: {
+              restaurant,
+            },
+          });
+        })
+        .catch((err) => reject({ status: 500, result: { error: err } }));
+    }
   });
 };
 

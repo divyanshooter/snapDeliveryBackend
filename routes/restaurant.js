@@ -17,8 +17,9 @@ Router.post("/login", (req, res) => {
 });
 
 Router.get("/fetch", isAuth, (req, res) => {
+  const menu = req.query.menu;
   restaurantCtrl
-    .getRestaurant(req.restaurantId)
+    .getRestaurant(req.restaurantId, menu)
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
