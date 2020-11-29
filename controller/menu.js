@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const addMenu = (resBody) => {
   return new Promise((resolve, reject) => {
     const newMenu = new menuModel(resBody);
+
     newMenu
       .save()
       .then((savedData) => {

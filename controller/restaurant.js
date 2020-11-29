@@ -393,6 +393,31 @@ const getRestaurants = (city) => {
   });
 };
 
+const fetchRestuarant = (id) => {
+  return new Promise((resolve, reject) => {
+    restaurant
+      .findOne({ _id: mongoose.Types.ObjectId(id) })
+      .then((restaurant) => {
+        if (!restaurant) {
+          reject({
+            status: 404,
+            result: {
+              error: "Restaurant Does Not exist",
+            },
+          });
+          return;
+        }
+        resolve({
+          status: 200,
+          result: {
+            restaurant,
+          },
+        });
+      })
+      .catch((err) => reject({ status: 500, result: { error: err } }));
+  });
+};
+
 const deleteRestaurant = (id) => {
   return new Promise((resolve, reject) => {
     restaurant
@@ -427,5 +452,6 @@ module.exports = {
   loginrestaurant,
   getRestaurant,
   getRestaurants,
+  fetchRestuarant,
   deleteRestaurant,
 };

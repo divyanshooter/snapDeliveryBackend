@@ -38,6 +38,14 @@ Router.get("/fetchAll", isAuth, (req, res) => {
     .catch((err) => res.status(err.status).json(err.result));
 });
 
+Router.get("/get", isAuth, (req, res) => {
+  const id = req.query.id;
+  restaurantCtrl
+    .fetchRestuarant(id)
+    .then((response) => res.status(response.status).json(response.result))
+    .catch((err) => res.status(err.status).json(err.result));
+});
+
 Router.delete("/delete", isAuth, (req, res) => {
   restaurantCtrl
     .deleteRestaurant(req.restaurantId)
