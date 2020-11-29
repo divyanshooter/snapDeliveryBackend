@@ -3,7 +3,7 @@ const menuCtrl = require("../controller/menu");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-const e = require("express");
+const transporter = require("../helper/email");
 
 const addrestaurant = (resBody) => {
   return new Promise((resolve, reject) => {
@@ -35,14 +35,15 @@ const addrestaurant = (resBody) => {
       !password ||
       !password.trim() ||
       !pincode
-    )
+    ) {
       reject({
         status: 400,
         result: {
           error: "Please provide all the Information",
         },
       });
-
+      return;
+    }
     restaurant
       .findOne({ email })
       .then((response) => {
@@ -53,6 +54,7 @@ const addrestaurant = (resBody) => {
               error: "Email Already Exists",
             },
           });
+          return;
         }
         menuCtrl
           .addMenu({ menu: [] })
@@ -76,7 +78,7 @@ const addrestaurant = (resBody) => {
                 newrestaurant
                   .save()
                   .then((savedData) => {
-                    if (!savedData)
+                    if (!savedData) {
                       return reject({
                         status: 500,
                         result: {
@@ -84,6 +86,7 @@ const addrestaurant = (resBody) => {
                             "please try again, error while saving restaurant to db",
                         },
                       });
+                    }
                     const token = jwt.sign(
                       {
                         restaurantId: savedData._id.toString(),
@@ -100,6 +103,12 @@ const addrestaurant = (resBody) => {
                         token,
                       },
                     });
+                    // return transporter.sendMail({
+                    //   to: email,
+                    //   from: `${process.env.EMAIL}`,
+                    //   subject: "Signup Successful!!",
+                    //   html: `<h1>SnapDelivery Welcomes You.</h1><p>Hi ${fullName} Thanks For Sigining Up!.Get your first client by successfully uploading your menu.</p>`,
+                    // });
                   })
                   .catch((err) => {
                     reject({ status: 500, result: { errors: err } });
@@ -113,16 +122,154 @@ const addrestaurant = (resBody) => {
   });
 };
 
-const loginrestaurant = (resBody) => {
+const updateRestaurant = (resBody) => {
   return new Promise((resolve, reject) => {
-    const { email, password } = resBody;
-    if (!email.trim() || !password.trim())
+    const {
+      mobileNumber,
+      password,
+      fullName,
+      address,
+      email,
+      age,
+      gender,
+      state,
+      city,
+      pincode,
+    } = resBody;
+    if (
+      !mobileNumber ||
+      !fullName ||
+      !fullName.trim() ||
+      !state ||
+      !state.trim() ||
+      !email ||
+      !email.trim() ||
+      !city ||
+      !city.trim() ||
+      !address ||
+      !address.trim() ||
+      !pincode
+    ) {
       reject({
         status: 400,
         result: {
           error: "Please provide all the Information",
         },
       });
+      return;
+    }
+    restaurant
+      .findOne({
+        email,
+      })
+      .then((user) => {
+        if (!user) {
+          reject({
+            status: 404,
+            result: {
+              error: "Restaurant Does Not Exists",
+            },
+          });
+          return;
+        }
+        if (password && password.trim()) {
+          bcrypt
+            .hash(password, 12)
+            .then((hashedPassword) => {
+              const updateData = {
+                fullName,
+                mobileNumber,
+                password: hashedPassword,
+                email,
+                gender,
+                age,
+                state,
+                address,
+                city,
+                pincode,
+              };
+              restaurant
+                .updateOne({ email }, updateData)
+                .then((updatedData) => {
+                  if (!updatedData) {
+                    reject({
+                      status: 500,
+                      result: {
+                        error:
+                          "please try again, error while saving user to db",
+                      },
+                    });
+                    return;
+                  }
+                  resolve({
+                    status: 201,
+                    result: {
+                      message: "Restaurant Updated Successfully Successfully",
+                    },
+                  });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  reject({ status: 500, result: { errors: err } });
+                });
+            })
+            .catch((err) =>
+              reject({ status: 500, result: { error: "Server Error" } })
+            );
+        } else {
+          const updateData = {
+            fullName,
+            mobileNumber,
+            password: user.password,
+            email,
+            gender,
+            age,
+            state,
+            address,
+            city,
+            pincode,
+          };
+
+          restaurant
+            .updateOne({ email }, updateData, { new: true })
+            .then((savedData) => {
+              if (!savedData) {
+                reject({
+                  status: 500,
+                  result: {
+                    error: "please try again, error while saving user to db",
+                  },
+                });
+                return;
+              }
+              resolve({
+                status: 200,
+                result: { message: "Restaurant Data Updated Successfully" },
+              });
+            })
+            .catch((err) => {
+              reject({ status: 500, result: { errors: err } });
+            });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        reject({ status: 500, result: { error: "Server Error" } });
+      });
+  });
+};
+const loginrestaurant = (resBody) => {
+  return new Promise((resolve, reject) => {
+    const { email, password } = resBody;
+    if (!email.trim() || !password.trim()) {
+      reject({
+        status: 400,
+        result: {
+          error: "Please provide all the Information",
+        },
+      });
+      return;
+    }
 
     restaurant
       .findOne({
@@ -136,6 +283,7 @@ const loginrestaurant = (resBody) => {
               error: "Restaurant Does Not exist",
             },
           });
+          return;
         }
 
         bcrypt
@@ -206,6 +354,7 @@ const getRestaurant = (id, menu) => {
                 error: "Restaurant Does Not exist",
               },
             });
+            return;
           }
           resolve({
             status: 200,
@@ -231,6 +380,7 @@ const getRestaurants = (city) => {
               error: "Restaurants Does Not exist",
             },
           });
+          return;
         }
         resolve({
           status: 200,
@@ -255,6 +405,7 @@ const deleteRestaurant = (id) => {
               error: "Restaurant Does Not exist",
             },
           });
+          return;
         }
 
         return menuCtrl.deleteMenuForever(deleterestaurant.menuId);
@@ -272,6 +423,7 @@ const deleteRestaurant = (id) => {
 };
 module.exports = {
   addrestaurant,
+  updateRestaurant,
   loginrestaurant,
   getRestaurant,
   getRestaurants,

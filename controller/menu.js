@@ -29,13 +29,13 @@ const addMenu = (resBody) => {
 const updateMenu = (id, resBody) => {
   return new Promise((resolve, reject) => {
     if (!id) {
-      reject({
+      return reject({
         stautus: 404,
         result: { error: "Menu does not exist" },
       });
     }
     if (!resBody.menu) {
-      reject({
+      return reject({
         status: 400,
         result: {
           error: "Please provide all the Information",
@@ -44,7 +44,7 @@ const updateMenu = (id, resBody) => {
     }
     resBody.menu.map((item) => {
       if (!item.name || !item.price || !item.description) {
-        reject({
+        return reject({
           status: 400,
           result: {
             error: "Please provide all the Information",
@@ -56,7 +56,7 @@ const updateMenu = (id, resBody) => {
       .updateOne({ _id: mongoose.Types.ObjectId(id) }, resBody)
       .then((updatedMenu) => {
         if (!updatedMenu) {
-          reject({
+          return reject({
             status: 404,
             result: {
               error: "Menu does not exists",
@@ -80,7 +80,7 @@ const getMenu = (id) => {
       .findOne({ _id: mongoose.Types.ObjectId(id) })
       .then((menu) => {
         if (!menu) {
-          reject({
+          return reject({
             status: 404,
             result: {
               error: "Menu Does Not exist",
@@ -101,7 +101,7 @@ const getMenu = (id) => {
 const deleteMenu = (id) => {
   return new Promise((resolve, reject) => {
     if (!id) {
-      reject({
+      return reject({
         stautus: 404,
         result: { error: "Menu does not exist" },
       });
@@ -110,7 +110,7 @@ const deleteMenu = (id) => {
       .replaceOne({ _id: mongoose.Types.ObjectId(id) }, { menu: [] })
       .then((deletedMenu) => {
         if (!deletedMenu) {
-          reject({
+          return reject({
             status: 404,
             result: {
               error: "Menu does not exist",
@@ -131,7 +131,7 @@ const deleteMenu = (id) => {
 const deleteMenuForever = (id) => {
   return new Promise((resolve, reject) => {
     if (!id) {
-      reject({
+      return reject({
         stautus: 404,
         result: { error: "Menu does not exist" },
       });

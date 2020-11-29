@@ -8,6 +8,12 @@ Router.post("/create", (req, res) => {
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
+Router.put("/create", isAuth, (req, res) => {
+  restaurantCtrl
+    .updateRestaurant(req.body)
+    .then((response) => res.status(response.status).json(response.result))
+    .catch((err) => res.status(err.status).json(err.result));
+});
 
 Router.post("/login", (req, res) => {
   restaurantCtrl
