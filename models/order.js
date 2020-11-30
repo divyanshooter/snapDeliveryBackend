@@ -9,12 +9,12 @@ const orderSchema = new mongoose.Schema({
   },
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
     required: true,
   },
   order: [
     {
-      item: String,
+      name: String,
       price: Number,
       description: String,
       qty: Number,

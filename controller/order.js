@@ -98,6 +98,7 @@ const updateOrder = (restaurantId, resBody) => {
 
 const getOrder = (id) => {
   return new Promise((resolve, reject) => {
+    console.log(id);
     orderModel
       .findOne({ _id: mongoose.Types.ObjectId(id) })
       .populate("userId")
@@ -111,6 +112,7 @@ const getOrder = (id) => {
             },
           });
         }
+        console.log(order);
         resolve({
           status: 200,
           result: {
@@ -118,7 +120,10 @@ const getOrder = (id) => {
           },
         });
       })
-      .catch((err) => reject({ status: 500, result: { error: err } }));
+      .catch((err) => {
+        console.log(err);
+        reject({ status: 500, result: { error: err } });
+      });
   });
 };
 
