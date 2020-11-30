@@ -368,10 +368,29 @@ const getRestaurant = (id, menu) => {
   });
 };
 
-const getRestaurants = (city) => {
+const getRestaurants = (city, q) => {
   return new Promise((resolve, reject) => {
+    const matchCondition = {};
+    if (city && city.trim() != "") {
+      matchCondition.city = city;
+    }
+    if (q && q.trim() != "") {
+      matchCondition["menu.menu.name"] = new RegExp(q);
+    }
+
     restaurant
-      .find({ city })
+      .aggregate([
+        {
+          $lookup: {
+            from: "menus",
+            localField: "menuId",
+            foreignField: "_id",
+            as: "menu",
+          },
+        },
+        { $unwind: "$menu" },
+        { $match: matchCondition },
+      ])
       .then((restaurants) => {
         if (!restaurants) {
           reject({

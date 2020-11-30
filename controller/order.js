@@ -98,7 +98,6 @@ const updateOrder = (restaurantId, resBody) => {
 
 const getOrder = (id) => {
   return new Promise((resolve, reject) => {
-    console.log(id);
     orderModel
       .findOne({ _id: mongoose.Types.ObjectId(id) })
       .populate("userId")

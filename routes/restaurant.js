@@ -30,10 +30,11 @@ Router.get("/fetch", isAuth, (req, res) => {
     .catch((err) => res.status(err.status).json(err.result));
 });
 
-Router.get("/fetchAll", isAuth, (req, res) => {
+Router.get("/fetchAll", (req, res) => {
   const city = req.query.city;
+  const q = req.query.q;
   restaurantCtrl
-    .getRestaurants(city)
+    .getRestaurants(city, q)
     .then((response) => res.status(response.status).json(response.result))
     .catch((err) => res.status(err.status).json(err.result));
 });
