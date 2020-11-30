@@ -43,6 +43,9 @@ const restaurantSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  avgPrice: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model("restaurant", restaurantSchema);

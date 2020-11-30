@@ -56,13 +56,13 @@ const updateOrder = (restaurantId, resBody) => {
   return new Promise((resolve, reject) => {
     if (!restaurantId || !resBody._id) {
       return reject({
-        stautus: 401,
+        status: 401,
         result: { error: "Not Authorized" },
       });
     }
     if (resBody.totalPrice || resBody.order) {
       return reject({
-        stautus: 401,
+        status: 401,
         result: { error: "Not Authorised" },
       });
     }
@@ -76,7 +76,6 @@ const updateOrder = (restaurantId, resBody) => {
         resBody
       )
       .then((updatedOrder) => {
-        console.log(updatedOrder);
         if (!updatedOrder || !updatedOrder.n) {
           return reject({
             status: 404,
@@ -111,7 +110,7 @@ const getOrder = (id) => {
             },
           });
         }
-        console.log(order);
+
         resolve({
           status: 200,
           result: {

@@ -18,6 +18,7 @@ const addrestaurant = (resBody) => {
       city,
       address,
       pincode,
+      avgPrice,
     } = resBody;
 
     if (
@@ -73,6 +74,7 @@ const addrestaurant = (resBody) => {
                   state,
                   city,
                   pincode,
+                  avgPrice,
                   menuId: res.result._id,
                 });
                 newrestaurant
@@ -135,6 +137,7 @@ const updateRestaurant = (resBody) => {
       state,
       city,
       pincode,
+      avgPrice,
     } = resBody;
     if (
       !mobileNumber ||
@@ -187,6 +190,7 @@ const updateRestaurant = (resBody) => {
                 address,
                 city,
                 pincode,
+                avgPrice,
               };
               restaurant
                 .updateOne({ email }, updateData)
@@ -368,16 +372,25 @@ const getRestaurant = (id, menu) => {
   });
 };
 
-const getRestaurants = (city, q) => {
+const getRestaurants = (city, q, start, end) => {
   return new Promise((resolve, reject) => {
     const matchCondition = {};
     if (city && city.trim() != "") {
       matchCondition.city = city;
     }
     if (q && q.trim() != "") {
-      matchCondition["menu.menu.name"] = new RegExp(q);
+      matchCondition["menu.menu.name"] = {
+        $regex: new RegExp(q),
+        $options: "i",
+      };
     }
-
+    if (start && end) {
+      matchCondition.avgPrice = { $lte: parseInt(end), $gte: parseInt(start) };
+    } else if (start) {
+      matchCondition.avgPrice = { $gte: parseInt(start) };
+    } else if (end) {
+      matchCondition.avgPrice = { $lte: parseInt(end) };
+    }
     restaurant
       .aggregate([
         {

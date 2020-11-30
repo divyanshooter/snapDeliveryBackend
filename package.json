@@ -33,6 +33,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.4.16",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "pdfkit": "^0.11.0",
     "stripe": "^8.126.0"
   },
   "devDependencies": {
