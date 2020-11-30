@@ -1328,3 +1328,4 @@
 ::1 - - [30/Nov/2020:06:08:59 +0000] "GET /app/restaurant/fetchAll?city=Muzaffarnagar&q=Copper HTTP/1.1" 200 774 "-" "PostmanRuntime/7.26.8"
 ::1 - - [30/Nov/2020:06:09:34 +0000] "GET /app/restaurant/fetchAll?city=Muzaffarnagar&q=ol HTTP/1.1" 200 774 "-" "PostmanRuntime/7.26.8"
 ::1 - - [30/Nov/2020:07:32:45 +0000] "GET /app/restaurant/fetchAll?city=Muzaffarnagar&q=ol HTTP/1.1" 200 774 "-" "PostmanRuntime/7.26.8"
+::1 - - [30/Nov/2020:08:12:14 +0000] "GET /app/restaurant/fetchAll?city=Muzaffarnagar&q=panner HTTP/1.1" 200 18 "-" "PostmanRuntime/7.26.8"
