@@ -54,9 +54,9 @@ Router.get("/invoice", (req, res, next) => {
       if (!order) {
         return next(new Error("No order Found"));
       }
-      if (order.userId._id.toString() !== req.userId.toString()) {
-        return res.status(401).json({ error: "Not Authorized" });
-      }
+      // if (order.userId._id.toString() !== req.userId.toString()) {
+      //   return res.status(401).json({ error: "Not Authorized" });
+      // }
       const invoiceName = "invoice-" + orderId + ".pdf";
 
       const pdfDoc = new PDFDocument({ size: "A4", margin: 50 });

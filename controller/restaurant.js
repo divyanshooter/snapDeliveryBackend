@@ -375,20 +375,20 @@ const getRestaurant = (id, menu) => {
 const getRestaurants = (city, q, start, end) => {
   return new Promise((resolve, reject) => {
     const matchCondition = {};
-    if (city && city.trim() != "") {
+    if (city && city.trim() != "" && city !== "undefined") {
       matchCondition.city = city;
     }
-    if (q && q.trim() != "") {
+    if (q && q.trim() != "" && q !== "undefined") {
       matchCondition["menu.menu.name"] = {
         $regex: new RegExp(q),
         $options: "i",
       };
     }
-    if (start && end) {
+    if (start && end && start !== "undefined" && end !== "undefined") {
       matchCondition.avgPrice = { $lte: parseInt(end), $gte: parseInt(start) };
-    } else if (start) {
+    } else if (start && start !== "undefined") {
       matchCondition.avgPrice = { $gte: parseInt(start) };
-    } else if (end) {
+    } else if (end && end !== "undefined") {
       matchCondition.avgPrice = { $lte: parseInt(end) };
     }
     restaurant
