@@ -44,7 +44,7 @@ Router.delete("/delete", isAuth, (req, res) => {
     .catch((err) => res.status(err.status).json(err.result));
 });
 
-Router.get("/invoice", isAuth, (req, res, next) => {
+Router.get("/invoice", (req, res, next) => {
   const orderId = req.query.id;
   orderModel
     .findById(orderId)
